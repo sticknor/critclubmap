@@ -1,0 +1,456 @@
+<!DOCTYPE html><html lang="en"><head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
+    <style>
+    	html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
+
+    </style>
+    <meta charset="utf-8">
+
+  </head>
+  <body>
+    <script>
+
+let img;
+
+function preload() {
+  img = loadImage('https://images.squarespace-cdn.com/content/v1/5aabd69185ede1fd2a51ddde/76d0531c-bf44-4bed-a3c0-63118084df05/Screen+Shot+2021-12-16+at+8.15.40+PM.png?format=2500w');
+}
+
+
+
+function setup() {
+  var parent = document.getElementById('myContainer');
+  var width = parent.offsetWidth;
+  var cnv = createCanvas(width, width / 2);
+  // console.log(parent)
+  // console.log(parent.offsetWidth);
+  // resizeCanvas(parent, windowHeight);
+}
+
+function windowResized() {
+  var parent = document.getElementById('myContainer');
+  var width = parent.offsetWidth;
+  var cnv = createCanvas(width, width / 2);
+  // console.log(parent)
+  // console.log(parent.offsetWidth);
+}
+
+/* crit club colors
+	pink = '#F3BCF5';
+	orange = '#D6AC1D';
+	blue = '#0307b4';
+*/
+
+var maskOpacity = 0;
+var maskOn = false;
+
+function draw() {
+  background(100);
+  image(img, 0, 0, width, height);
+  if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
+  	maskOn = true;
+  	if (maskOpacity < 100) maskOpacity+=5;
+  } else {
+	maskOn = false;
+	if (maskOpacity > 0) maskOpacity-=5;
+  }
+  fill(0, 0, 0, maskOpacity);
+  rect(0, 0, width, height);
+
+  var cityHovered = -1;
+
+  for (var i=0; i < coords.length; i++) {
+  	var marker = coords[i];
+  	var markerX = marker.percent[0]*width;
+  	var markerY = marker.percent[1]*height;
+  	var markerSize = map(marker.people, 1, 80, 10, 30);
+   	var hovered = false;
+    	
+    if (dist(mouseX, mouseY, markerX, markerY) < markerSize/2) {
+    	if (cityHovered === -1) {
+    		hovered = true;
+    		cityHovered = i;
+    	}
+    }
+
+    noStroke();
+    // stroke('#D6AC1D');
+    // strokeWeight(1);
+    if (hovered === true) fill('#F3BCF5BB');
+    else fill('#D6AC1DBB');
+    circle(markerX, markerY, markerSize);
+
+    if (hovered) {
+		fill(255, 255, 255);
+		textSize(24);
+		textAlign(CENTER, CENTER);
+		noStroke();
+		text(marker.place,  width / 2, height-30)
+    }
+    
+  }
+
+  // draw hovered on top
+  if (cityHovered !== -1){
+  	var hoverMarker = coords[cityHovered];
+  	var hoverMarkerX = hoverMarker.percent[0]*width;
+  	var hoverMarkerY = hoverMarker.percent[1]*height;
+  	var hoverMarkerSize = map(hoverMarker.people, 1, 80, 6, 20);
+  	fill('#F3BCF5DD');
+  	circle(hoverMarkerX, hoverMarkerY, hoverMarkerSize);
+  }
+
+
+  // textSize(24);
+  // noStroke();
+  // fill(0);
+  // text(mouseX/width+'%, '+mouseY/height+'%', width/2, 40);
+  
+}
+
+
+var coords = [{
+		place: "Albany, NY",
+		percent: [.296, .385],
+		people: 1,
+	},
+	{
+		place: "Albuquerque, NM",
+		percent: [.201, .432],
+		people: 1,
+	},
+	{
+		place: "Alexandria, VA",
+		percent: [.287, .402],
+		people: 2,
+	},
+	{
+		place: "Anchorage, AK",
+		percent: [.078, .262],
+		people: 1,
+	},
+	{
+		place: "Austin, TX",
+		percent: [.222, .462],
+		people: 1,
+	},
+	{
+		place: "Baltimore, MD",
+		percent: [.288, .412],
+		people: 1,
+	},
+	{
+		place: "Beacon, NY",
+		percent: [.296, .397],
+		people: 4,
+	},
+	{
+		place: "Belchertown, MA",
+		percent: [.298, .38],
+		people: 1,
+	},
+	{
+		place: "Berkeley, CA",
+		percent: [.159, .397],
+		people: 1,
+	},
+	{
+		place: "Biddeford, ME",
+		percent: [.311, .375],
+		people: 1,
+	},
+	{
+		place: "Boston, MA",
+		percent: [.31, .387],
+		people: 4,
+	},
+	{
+		place: "Bowie, MD",
+		percent: [.286, .41],
+		people: 1,
+	},
+	{
+		place: "Brandford, CT",
+		percent: [.302, .395],
+		people: 1,
+	},
+	{
+		place: "Brisbane, Austrailia",
+		percent: [.93, .8],
+		people: 1,
+	},
+	{
+		place: "Burlington, VT",
+		percent: [.301, .365],
+		people: 3,
+	},
+	{
+		place: "Calgary, Canada",
+		percent: [.166, .352],
+		people: 1,
+	},
+	{
+		place: "Cambridge, MA",
+		percent: [.305, .387],
+		people: 1,
+	},
+	{
+		place: "Carslbad, CA",
+		percent: [.175, .447],
+		people: 1,
+	},
+	{
+		place: "Charlotte, NC",
+		percent: [.28, .43],
+		people: 1,
+	},
+	{
+		place: "Cleveland, OH",
+		percent: [.277, .39],
+		people: 1,
+	},
+	{
+		place: "Colchester, VT",
+		percent: [.297, .37],
+		people: 1,
+	},
+	{
+		place: "Columbus, OH",
+		percent: [.273, .402],
+		people: 1,
+	},
+	{
+		place: "Cumming, GA",
+		percent: [.265, .44],
+		people: 1,
+	},
+	{
+		place: "Dayton, OH",
+		percent: [.268, .4],
+		people: 1,
+	},
+	{
+		place: "East Windsor, NJ",
+		percent: [.293, .4],
+		people: 1,
+	},
+	{
+		place: "Glen Cove, NY",
+		percent: [.301, .395],
+		people: 1,
+	},
+	{
+		place: "Haiku, HA",
+		percent: [.068, .517],
+		people: 1,
+	},
+	{
+		place: "Hastings, NY",
+		percent: [.283, .385],
+		people: 1,
+	},
+	{
+		place: "Dublin, Ireland",
+		percent: [.482, .317],
+		people: 1,
+	},
+	{
+		place: "Jacksonville, FL",
+		percent: [.273, .46],
+		people: 1,
+	},
+	{
+		place: "Katonah, NY",
+		percent: [.296, .39],
+		people: 1,
+	},
+	{
+		place: "Lake Hill, NY",
+		percent: [.292, .387],
+		people: 1,
+	},
+	{
+		place: "Larchmont, NY",
+		percent: [.296, .392],
+		people: 3,
+	},
+	{
+		place: "Leesburg, VA",
+		percent: [.282, .41],
+		people: 1,
+	},
+	{
+		place: "Los Angeles, CA",
+		percent: [.168, .435],
+		people: 9,
+	},
+	{
+		place: "Milwaukee, WI",
+		percent: [.256, .382],
+		people: 2,
+	},
+	{
+		place: "Montclair, NJ",
+		percent: [.292, .395],
+		people: 1,
+	},
+	{
+		place: "Montevideo, Uruguay",
+		percent: [.343, .805],
+		people: 1,
+	},
+	{
+		place: "Mt. Ranier, MD",
+		percent: [.286, .412],
+		people: 1,
+	},
+	{
+		place: "Nashville, IN",
+		percent: [.26, .402],
+		people: 1,
+	},
+	{
+		place: "Oakland, CA",
+		percent: [.158, .397],
+		people: 1,
+	},
+	{
+		place: "Paia, HI",
+		percent: [.067, .517],
+		people: 2,
+	},
+	{
+		place: "Parañaque City, Philippines",
+		percent: [.84, .57],
+		people: 2,
+	},
+	{
+		place: "Philadelphia",
+		percent: [.292, .405],
+		people: 6,
+	},
+	{
+		place: "Pismo Beach, CA",
+		percent: [.161, .42],
+		people: 1,
+	},
+	{
+		place: "Portland, OR",
+		percent: [.157, .37],
+		people: 1,
+	},
+	{
+		place: "Redding,CT",
+		percent: [.302, .382],
+		people: 1,
+	},
+	{
+		place: "Roanoke, VA",
+		percent: [.282, .42],
+		people: 1,
+	},
+	{
+		place: "Rochester, NY",
+		percent: [.283, .382],
+		people: 1,
+	},
+	{
+		place: "Rockfall, CT",
+		percent: [.302, .39],
+		people: 1,
+	},
+	{
+		place: "San Francisco, CA",
+		percent: [.156, .397],
+		people: 2,
+	},
+	{
+		place: "Seattle, WA",
+		percent: [.153, .35],
+		people: 1,
+	},
+	{
+		place: "Shanghai, China",
+		percent: [.838, .455],
+		people: 1,
+	},
+	{
+		place: "South Lyon, MI",
+		percent: [.267, .385],
+		people: 1,
+	},
+	{
+		place: "Stamford, CT",
+		percent: [.3, .392],
+		people: 3,
+	},
+	{
+		place: "Stonington, CT",
+		percent: [.302, .392],
+		people: 2,
+	},
+	{
+		place: "Tacoma, WA",
+		percent: [.156, .357],
+		people: 1,
+	},
+	{
+		place: "Tivoli, NY",
+		percent: [.298, .39],
+		people: 1,
+	}, {
+		place: "Topsham, ME",
+		percent: [.305, .382],
+		people: 2,
+	}, {
+		place: "Toronto, Canada",
+		percent: [.281, .377],
+		people: 2,
+	},
+	{
+		place: "Ulster Park, NY",
+		percent: [.298, .385],
+		people: 1,
+	},
+	{
+		place: "Urbana, IL",
+		percent: [.256, .4],
+		people: 2,
+	},
+	{
+		place: "Vancouver, Canada",
+		percent: [.156, .345],
+		people: 4,
+	},
+	{
+		place: "New York City, NY",
+		percent: [.295, .397],
+		people: 80,
+	},
+		// {
+	// 	place: "Queens, NY",
+	// 	percent: [.17, .17],
+	// 	people: 5,
+	// },
+	// 	{
+	// 	place: "Brooklyn, NY",
+	// 	percent: [.295, .397],
+	// 	people: 52,
+	// },
+	// {
+	// 	place: "Bronx, NY",
+	// 	percent: [.14, .14],
+	// 	people: 1,
+	// },
+];
+
+</script>
+  
+<div id="myContainer" width="100%"></div>
+</body></html>
