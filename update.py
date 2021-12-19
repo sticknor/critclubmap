@@ -16,18 +16,20 @@ if __name__ == "__main__":
     with config.MAP_DATA_PATH.open() as f:
         map_data = json.load(f)
 
+    new_map_data = {}
     for row in airtable_data:
         place = row["fields"].get("Place")
         num_crit_clubbers = row["fields"].get("Amount")
 
+        new_map_data[place] = {
+            "place": place,
+            "num_crit_clubbers": num_crit_clubbers,
+        }
+        
         if place not in map_data:
-            location = gmaps.geocode(address=place)
-            map_data[place] = {
-                "place": place,
-                "location": location,
-            }
-
-        map_data[place]["num_crit_clubbers"] = num_crit_clubbers
+            new_map_data[place]["location"] = gmaps.geocode(address=place)
+        else:
+            new_map_data[place]["location"] = map_data[place]["location"]
 
     with config.MAP_DATA_PATH.open(mode="w") as f:
-        json.dump(map_data, f)
+        json.dump(new_map_data, f)
