@@ -1,0 +1,91 @@
+<!-- amCharts includes -->
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/maps.js"></script>
+<script src="https://www.amcharts.com/lib/4/geodata/worldLow.js"></script>
+
+<!-- load map_data -->
+<script>
+  function createMap(mapData) {
+    console.log("CREATE MAP")
+    console.log(mapData)
+    /**
+     * Create the amCharts Map
+     */
+
+    // Create map instance
+    var chart = am4core.create("ammap", am4maps.MapChart);
+    chart.geodata = am4geodata_worldLow;
+    chart.projection = new am4maps.projections.Mercator();
+    chart.zoomDuration = 0;
+    chart.homeZoomLevel = 3;
+    chart.homeGeoPoint = {
+      latitude: 40.712775,
+      longitude: -74.005973
+    };
+
+    chart.zoomControl = new am4maps.ZoomControl();
+
+    // Configure country map polygon series
+    var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+    polygonSeries.exclude = ["AQ"];
+    polygonSeries.useGeodata = true;
+    var polygonTemplate = polygonSeries.mapPolygons.template;
+    polygonTemplate.fill = am4core.color("#74B266");
+    polygonTemplate.fillOpacity = 0.5;
+
+    // Configure city marker series
+    var imageSeries = chart.series.push(new am4maps.MapImageSeries());
+    var imageSeriesTemplate = imageSeries.mapImages.template;
+    var circle = imageSeriesTemplate.createChild(am4core.Circle);
+    circle.radius = 4;
+    circle.fill = am4core.color("#B27799");
+    circle.stroke = am4core.color("#FFFFFF");
+    circle.strokeWidth = 2;
+    circle.nonScaling = true;
+    circle.tooltipText = "{title}";
+    circle.propertyFields.radius = "radius";
+    imageSeriesTemplate.propertyFields.latitude = "latitude";
+    imageSeriesTemplate.propertyFields.longitude = "longitude";
+
+    let imageData = []
+    for (var place in mapData) {
+      var placeInfo = mapData[place]
+      imageData.push({
+        "title": place,
+        "radius": placeInfo["num_crit_clubbers"],
+        "latitude": placeInfo["location"][0]["geometry"]["location"]["lat"],
+        "longitude": placeInfo["location"][0]["geometry"]["location"]["lng"],
+      })
+    }
+    imageSeries.data = imageData;
+
+    // var hs = polygonTemplate.states.create("hover");
+    // hs.properties.fill = am4core.color("#367B25");
+  }
+
+  fetch("map_data.json")
+    .then(response => response.json())
+    .then(createMap);
+</script>
+<style>
+  #maps {
+    width: 510px;
+    height: 500px;
+    border: 0px solid #eee;
+    margin: 0px auto;
+    position: relative;
+  }
+
+  .mapdiv {
+    width: 510px;
+    height: 500px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+</style>
+
+<!-- HTML -->
+<div id="maps">
+  <div id="ammap" class="mapdiv" style="visibility: visible;"></div>
+</div>
