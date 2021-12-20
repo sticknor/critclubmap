@@ -36,7 +36,7 @@
     polygonSeries.exclude = ["AQ"];
     polygonSeries.useGeodata = true;
     var polygonTemplate = polygonSeries.mapPolygons.template;
-    polygonTemplate.fill = am4core.color("#bdaec0");
+    polygonTemplate.fill = am4core.color("#b4bfb2");
     polygonTemplate.fillOpacity = 0.5;
 
     // Configure city marker series
@@ -44,10 +44,10 @@
     var imageSeriesTemplate = imageSeries.mapImages.template;
     var circle = imageSeriesTemplate.createChild(am4core.Circle);
     circle.radius = 4;
-    circle.fill = am4core.color("#D6AC1D99");
-    circle.stroke = am4core.color("#FFFFFFAA");
+    circle.fill = am4core.color("#ffc50099");
+    circle.stroke = am4core.color("#6e5500AA");
     circle.strokeWidth = 1;
-    circle.nonScaling = true;
+    circle.nonScaling = false;
     circle.tooltip = new am4core.Tooltip();
     circle.tooltipText = "{title}";
     circle.propertyFields.radius = "radius";
