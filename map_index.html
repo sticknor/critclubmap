@@ -34,7 +34,7 @@
     // Configure country map polygon series
     var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
     polygonSeries.exclude = ["AQ"];
-    polygonSeries.useGeodata = false;
+    polygonSeries.useGeodata = true;
     var polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.fill = am4core.color("#b4bfb2");
     polygonTemplate.fillOpacity = 0.5;
@@ -47,7 +47,7 @@
     circle.fill = am4core.color("#ffc50099");
     circle.stroke = am4core.color("#6e5500AA");
     circle.strokeWidth = 1;
-    circle.nonScaling = false;
+    circle.nonScaling = true;
     circle.tooltip = new am4core.Tooltip();
     circle.tooltipText = "{title}";
     circle.propertyFields.radius = "radius";
