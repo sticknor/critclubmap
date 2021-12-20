@@ -34,7 +34,7 @@
     // Configure country map polygon series
     var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
     polygonSeries.exclude = ["AQ"];
-    polygonSeries.useGeodata = true;
+    polygonSeries.useGeodata = false;
     var polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.fill = am4core.color("#b4bfb2");
     polygonTemplate.fillOpacity = 0.5;
@@ -66,7 +66,7 @@
       var placeInfo = mapData[place]
       imageData.push({
         "title": place,
-        "radius": map(placeInfo["num_crit_clubbers"], 1, 50, 4, 20),
+        "radius": map(placeInfo["num_crit_clubbers"], 1, 50, 15, 50),
         "latitude": placeInfo["location"][0]["geometry"]["location"]["lat"],
         "longitude": placeInfo["location"][0]["geometry"]["location"]["lng"],
       })
